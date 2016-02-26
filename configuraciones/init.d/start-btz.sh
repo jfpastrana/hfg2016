@@ -13,13 +13,14 @@
 
 MAC_OBD="00:12:6F:10:53:34"
 MAC_MLAIS="0C:00:90:E7:8F:47"
+MAC_OBD2="00:0D:18:3A:67:89"
 
 	case "$1" in
 	start)
 		echo "Iniciando servicio start-rpi..."
-		/usr/bin/bluez-test-device trusted $MAC_OBD yes
-		/usr/bin/rfcomm release 0 $MAC_OBD
-		/usr/bin/rfcomm connect 0 $MAC_OBD
+		/usr/bin/bluez-test-device trusted $MAC_OBD2 yes
+		/usr/bin/rfcomm release 0 $MAC_OBD2
+		/usr/bin/rfcomm connect 0 $MAC_OBD2
 	;;
 	stop)
 		echo "Deteniendo el servicio start-rpi..."

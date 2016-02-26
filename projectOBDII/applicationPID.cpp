@@ -316,7 +316,7 @@ void storePID(){
 			SQLOBD.insertarCarInfo(auxStructCar);
 			printf("\nInsertados datos SQL\n\n");
 			t=0;
-			delay(1000);
+			//delay(1000);
 		}
 	t++;
 	}while(t!=5);
