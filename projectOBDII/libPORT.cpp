@@ -28,6 +28,7 @@ libPORT::libPORT(){
 
 }
 
+
 	/*Muestra por pantalla el contenido del buffer del Puerto
 	 * Serie, el puerto serie se vacia.
 	 */
@@ -37,16 +38,16 @@ void libPORT::print(){
 	int answer = 0, i = 0, buffer = 0, timer = 0;
 	long previous;
 	previous = millis();
-    	do{
+    do{
 		if(Serial.available() != 0){
-            		serial_read[i] = Serial.read();
-          		i++;
-        	}
-        	if (strstr(serial_read,">") != NULL){
-        		answer=1;
+            serial_read[i] = Serial.read();
+          	i++;
+        }
+        if (strstr(serial_read,">") != NULL){
+        answer=1;
 		}
-    	}while(answer==0 && ((millis()-previous)<5000));
-    	printf("\n---------------------------------------------",serial_read);
+    }while(answer==0 && ((millis()-previous)<5000));
+    printf("\n---------------------------------------------",serial_read);
 
 	if( strstr(serial_read,"OK")!=NULL){
 		printf("\nComando recibido correctamente");
@@ -60,10 +61,11 @@ void libPORT::print(){
 
 	/*Recoge el contenido del Puerto serie y lo alamacena en un
 	 * array de caracteres, posteriormente se devuelve mediante
-	 * paso por funcion como un puntero tipo char.
+	 * paso por función como un puntero tipo char.
 	 */
 
 char * libPORT::read(){
+
 
 	char serial_read[200]="";
 	char fullInfo[200]="";
