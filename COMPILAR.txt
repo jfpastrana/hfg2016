@@ -1,28 +1,3 @@
-/* GSM y geolocalización (sistemaM2M) */
-
-	/* Librerias*/
-
-	g++ -c arduPi.cpp -o arduPi.o
-	g++ -c libRPI.cpp -o libRPI.o
-	g++ -c libconsultaBBDD.cpp -o libconsultaBBDD.o
-	g++ -c libSMS.cpp -o libSMS.o
-	g++ -c libmySQL.cpp -o libmySQL.o -L/usr/include/mysql -lmysqlclient -I/usr/include/mysql
-
-
-	/* Programas */
-	
-	g++ -lrt -lpthread ModuleIgnition.cpp arduPi.o -o ModuleIgnition
-	g++ -lrt -lpthread ModuleOff.cpp arduPi.o -o ModuleOff
-	g++ -lrt -lpthread SIMPin.cpp arduPi.o libRPI.o -o SIMPin
-	g++ -lrt -lpthread GPSOn.cpp arduPi.o libRPI.o -o GPSOn
-	g++ -lrt -lpthread GSMSms.cpp arduPi.o -o GSMSms
-	g++ -lrt -lpthread SMSApplication.cpp arduPi.o libRPI.o libconsultaBBDD.o libSMS.o -o SMSApplication
-
-	g++ -lrt -lpthread geolocation.cpp arduPi.o libRPI.o libmySQL.o -o geolocation `mysql_config --cflags --libs`
-
-	g++ mostrarMySQL.cpp -o mostrarMySQL `mysql_config --cflags --libs`
-
-
 /* Telemetría y diagnóstico (OBDII) */
 
 	/* Librerias*/
@@ -36,24 +11,3 @@
     	/* Programas */
 
     	g++ -lrt -lpthread applicationPID.cpp arduPi.o libOBDII.o libPORT.o libmysqlOBDII.o -o applicationPID `mysql_config --cflags --libs`
-
-
-/* Envio de datos mediante HTTP (GPRS) */
-
-
-	/* Librerias */ 
-
-	g++ -c arduPi.cpp -o arduPi.o
-	g++ -c libRPI.cpp -o libRPI.o
-	g++ -c libOBDII.cpp -o libOBDII.o
-
-	g++ -c libmysqlRPI.cpp -o libmysqlRPI.o -L/usr/include/mysql -lmysqlclient -I/usr/include/mysql
-
-	/* Programas */
-
-	g++ -lrt -lpthread sendInfoHTTP.cpp arduPi.o libOBDII.o libRPI.o libmysqlRPI.o -o sendInfoHTTP `mysql_config --cflags --libs`
-	g++ -lrt -lpthread setTime.cpp arduPi.o libRPI.o libOBDII.o -o setTime
-
-
-
-
