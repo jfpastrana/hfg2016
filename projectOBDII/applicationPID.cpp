@@ -32,7 +32,6 @@ carInfo auxStructCar;
 void setup(){
 
 	Serial.begin(115200);
-
 	delay(2000);
 
 }
@@ -94,16 +93,6 @@ void storePID(){
 	int t=0;
 
 	do{
-        	/* Pido PID 0104 DRIVER'S DEMAND ENGINE- */
-        	printf("\nPediendo PID 1.....");
-        	Serial.flush();
-        	Serial.println("0104");
-        	strcpy(buffer,PORT.read());
-        	strcpy(auxbuffer,"04");
-        	strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,1));
-        	strcpy(aux,OBD.tratarPID(resultado,auxbuffer,1));
-		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-		strcpy(auxStructCar.engine,aux);
 
         	/* ENGINE COOLANT TEMPERATURE */
         	printf("\nPediendo PID 2.....");
@@ -151,22 +140,6 @@ void storePID(){
 		if(strcmp(resultado,"0")==0) strcpy(resultado,"0.00");
 		strcpy(auxStructCar.speed,resultado);
 
-    		/* Velocidad Media */
-		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,1));
-        	if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-        	strcpy(auxStructCar.aspeed,aux);
-
-		/* Pido PID 0110 MAF AIR FLOW RATE */
-        	printf("\nPediendo PID 6.....");
-        	Serial.flush();
-        	Serial.println("0110");
-        	strcpy(buffer,PORT.read());
-        	strcpy(auxbuffer,"10");
-        	strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,2));
-        	strcpy(aux,OBD.tratarPID(resultado,auxbuffer,2));
-        	if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-        	strcpy(auxStructCar.maf,aux);
-
         	/* Pido PID 0111 THROTTLE POSITION */
         	printf("\nPediendo PID 7.....");
         	Serial.flush();
@@ -205,125 +178,18 @@ void storePID(){
         	if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
         	strcpy(auxStructCar.eficgas,aux);
 
-		if(t==4){
-            		/* Pido PID 010F INTAKE AIR TEMPERATURE */
-	      		printf("\nPediendo PID 9.....");
-            		Serial.flush();
-			Serial.println("010F");
-            		strcpy(buffer,PORT.read());
-            		strcpy(auxbuffer,"0F");
-            		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,1));
-            		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,1));
-            		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-            		strcpy(auxStructCar.intake_air,aux);
+		/* Insertamos ID para mySQL */
+		sprintf(idsql,"%d",timer);
+		strcpy(auxStructCar.id,idsql);
 
-           		/* RUN TIME SINCE ENGINE START*/
-           		printf("\nPediendo PID 10.....");
-           		Serial.flush();
-           		Serial.println("011F");
-           		strcpy(buffer,PORT.read());
-           		strcpy(auxbuffer,"011F");
-           		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,2));
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,2));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-           		strcpy(auxStructCar.run_time,aux);
+		printf("\nID: %s",auxStructCar.id);
+		timer++;
 
-			/* DISTANCE TRAVLLED WITH "MIL"*/
-			printf("\nPediendo PID 11.....");
-        		Serial.flush();
-        		Serial.println("0121");
-        		strcpy(buffer,PORT.read());
-        		strcpy(auxbuffer,"021");
-        		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,2));
-			strcpy(aux,OBD.tratarPID(resultado,auxbuffer,2));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-           		strcpy(auxStructCar.mil,aux);
+		/* Insertamos la informacion en la BBDD SQL */
+		SQLOBD.insertarCarInfo(auxStructCar);
+		printf("\nInsertados datos SQL\n\n");
 
-           		/* Pido PID 0124 02S1_WR_LAMBDA EQUIVALENCE RAIO VOLTAGE */
-           		printf("\nPediendo PID 12.....");
-           		Serial.flush();
-           		Serial.println("0124");
-           		strcpy(buffer,PORT.read());
-           		strcpy(auxbuffer,"24");
-           		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,4));
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,4));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-           		strcpy(auxStructCar.lambda_o2s1_v,aux);
-
-          		/* Pido PID 012B 02S8_WR_LAMBDA EQUIVALENCE RAIO VOLTAGE */
-           		printf("\nPediendo PID 13.....");
-           		Serial.flush();
-           		Serial.println("012B");
-           		strcpy(buffer,PORT.read());
-           		strcpy(auxbuffer,"2B");
-           		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,4));
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,4));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-           		strcpy(auxStructCar.lambda_o2s8_v,aux);
-
-           		/* Pido PID 012C COMMANDED EGR */
-           		printf("\nPediendo PID 14.....");
-           		Serial.flush();
-           		Serial.println("012C");
-           		strcpy(buffer,PORT.read());
-           		strcpy(auxbuffer,"2C");
-           		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,1));
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,1));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-           		strcpy(auxStructCar.egr,aux);
-
-           		/* FUEL LEVEL INPUT*/
-           		printf("\nPediendo PID 15.....");
-           		Serial.flush();
-           		Serial.println("012F");
-          		strcpy(buffer,PORT.read());
-           		strcpy(auxbuffer,"02F");
-           		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,1));
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,1));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-           		strcpy(auxStructCar.fuel_level,aux);
-
-       			/* Pido PID 0136 02S3_WR_LAMBDA EQUIVALENCE RAIO CURRENT */
-           		printf("\nPediendo PID 16.....");
-           		Serial.flush();
-           		Serial.println("0136");
-           		strcpy(buffer,PORT.read());
-           		strcpy(auxbuffer,"36");
-           		strcpy(resultado,OBD.dividirPID(buffer,auxbuffer,4));
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,4));
-           		if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-          		strcpy(auxStructCar.lambda_o2s3_c,aux);
-
-           		/* CALCULO DE CONSUMO A LOS 100KM, PID PROPIO FF */
-          		printf("\nCalculando consumo a los 100km.....");
-           		strcpy(auxbuffer,"FF");
-			strcpy(resultado,"FF");
-           		strcpy(aux,OBD.tratarPID(resultado,auxbuffer,0));
-    			if(strcmp(aux,"0")==0) strcpy(aux,"0.00");
-			strcpy(auxStructCar.consumo,aux);
-
-			/* GUARDANDO DTCs */
-			printf("\nConsultando DTCs.....");
-			Serial.flush();
-			Serial.println("03");
-			strcpy(buffer,PORT.read());
-			strcpy(auxStructCar.dtc,OBD.showDTC(buffer));
-
-			/* Insertamos ID para mySQL */
-			sprintf(idsql,"%d",timer);
-			strcpy(auxStructCar.id,idsql);
-
-			printf("\nID: %s",auxStructCar.id);
-			timer++;
-
-			/* Insertamos la informacion en la BBDD SQL */
-			SQLOBD.insertarCarInfo(auxStructCar);
-			printf("\nInsertados datos SQL\n\n");
-
-			t=0;
-			delay(1000);
-		}
-	t++;
+		t++;
 	}while(t!=5);
 }
 
