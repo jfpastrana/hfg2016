@@ -1,0 +1,34 @@
+/* Telemetría y diagnóstico (OBDII) */
+
+	/* Librerias*/
+
+	g++ -c arduPi.cpp -o arduPi.o
+	g++ -c libPORT.cpp -o libPORT.o
+	g++ -c libOBDII.cpp -o libOBDII.o
+
+    	g++ -c libmysqlOBDII.cpp -o libmysqlOBDII.o -L/usr/include/mysql -lmysqlclient -I/usr/include/mysql
+
+    	/* Programas */
+
+    	g++ -lrt -lpthread applicationPID.cpp arduPi.o libOBDII.o libPORT.o libmysqlOBDII.o -o applicationPID `mysql_config --cflags --libs`
+
+
+/* Envio de datos mediante CURL */
+
+
+	/* Librerias */ 
+
+	g++ -c arduPi.cpp -o arduPi.o
+	g++ -c libRPI.cpp -o libRPI.o
+	g++ -c libOBDII.cpp -o libOBDII.o
+
+	g++ -c libmysqlRPI.cpp -o libmysqlRPI.o -L/usr/include/mysql -lmysqlclient -I/usr/include/mysql
+
+	/* Programas */
+
+	g++ -lrt -lpthread send2DB.cpp arduPi.o libOBDII.o libRPI.o libmysqlRPI.o -o send2DB `mysql_config --cflags --libs`
+
+
+
+
+
